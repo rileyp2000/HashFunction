@@ -1,4 +1,4 @@
-//TODO Make sure you remove all of the TODO comments from this file before turning itin
+//TODO Make sure you remove all of the TODO comments from this file before turning it in
 
 public class TicTacToeHashCode extends Board {
 
@@ -6,6 +6,7 @@ public class TicTacToeHashCode extends Board {
     
   TicTacToeHashCode(String s) {
    super(s);
+   winners = new boolean[(int)Math.pow(3, 9)];
   // TODO Instantiate/fill winners array.  
   }
   
@@ -13,9 +14,31 @@ public class TicTacToeHashCode extends Board {
   //   possible values the game board (3 ^ 9) and it MUST use the super.charAt(row, col) function
   @Override
     public int myHashCode() {
-
-      return 0;
-   }
+	  int[][] pow3 = new int[][] {{1,3,9},{27,81,243},{729,2187,6561}};
+	  int total = 0;
+	  int curChar = 0;
+	  
+	  for(int r = 0; r < 3; r ++) {
+		  for(int c = 0; c < 3; c++) {
+			  char item = super.charAt(r, c);
+			  switch(item) {
+			  case 'x':
+				  curChar = 1;
+				  break;
+			  case 'o':
+				  curChar = 2;
+				  break;
+			  default:
+				  curChar = 0;
+				  
+			  }
+			  total += curChar * pow3[r][c];
+		  }
+	  }
+	  
+	  return total;	  
+   
+  }
    
     public boolean isWin(String s) {
     // return the value in the winner array for the hash chode of the board string sent in.
