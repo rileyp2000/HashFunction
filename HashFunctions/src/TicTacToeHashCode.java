@@ -1,4 +1,4 @@
-//TODO Make sure you remove all of the TODO comments from this file before turning it in
+//TODO Make sure you remove all of the TODO comments from this file before turning itin
 
 public class TicTacToeHashCode extends Board {
 
@@ -6,8 +6,12 @@ public class TicTacToeHashCode extends Board {
     
   TicTacToeHashCode(String s) {
    super(s);
-   winners = new boolean[(int)Math.pow(3, 9)];
   // TODO Instantiate/fill winners array.  
+   winners = new boolean[(int)Math.pow(3, 9)];
+   
+   //read in file of winners
+   //then calc hash of each
+   //place in array
   }
   
   // TODO - write the myHashCode function.  It must create a unique hashcode for all of the 
@@ -49,8 +53,10 @@ public class TicTacToeHashCode extends Board {
       TicTacToeHashCode board = new TicTacToeHashCode ("Tic Tac Toe");
       while (true) {
       
-         String currentBoard = board.boardValues[(int)(Math.random()* board.boardValues.length)];
-         board.show(currentBoard);
+       //TODO this line no longer works
+       //  String currentBoard = board.boardValues[(int)(Math.random()* board.boardValues.length)];
+         
+         board.displayRandomString();
          board.setHashCode(board.myHashCode());
          // TODO Update this line to call your isWin method.
          board.setWinner(TicTacToe.isWin(currentBoard));
@@ -58,4 +64,5 @@ public class TicTacToeHashCode extends Board {
          Thread.sleep(4000);      
       }
    }
-}
+ }  
+  
