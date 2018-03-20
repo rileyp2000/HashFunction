@@ -167,10 +167,10 @@ abstract class Board extends JFrame implements ActionListener {
    // TODO Added this Method
    public void setBoardString(String s) {
       boardString = s;
-      show(s);
+
    }
    
-   public String getBoardString(String s) {
+   public String getBoardString() {
      return boardString;
    }
    // TODO Added this message

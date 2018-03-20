@@ -1,3 +1,7 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 //TODO Make sure you remove all of the TODO comments from this file before turning itin
 
 public class TicTacToeHashCode extends Board {
@@ -8,14 +12,45 @@ public class TicTacToeHashCode extends Board {
    super(s);
   // TODO Instantiate/fill winners array.  
    winners = new boolean[(int)Math.pow(3, 9)];
-   
+   fillWinners();
    //read in file of winners
    //then calc hash of each
    //place in array
   }
   
-  // TODO - write the myHashCode function.  It must create a unique hashcode for all of the 
-  //   possible values the game board (3 ^ 9) and it MUST use the super.charAt(row, col) function
+  public void fillWinners() {
+	  /*System.out.print("Enter the Winners File Name: ");
+	  Scanner kybd = new Scanner(System.in);
+	  String fn = kybd.nextLine();
+	  kybd.close();*/
+	  
+	  String fn = "TicTacToeWinners.txt";
+	  
+	  
+	  Scanner file = fileToScanner(fn);
+	  
+	  while(file.hasNextLine()) {
+		  String board = file.nextLine();
+		  super.setBoardString(board);
+		  winners[myHashCode()] = true;
+	  }
+		  
+  }
+  
+  public Scanner fileToScanner(String s) {
+	  File f = new File(s);
+	  Scanner ret = null;
+	  
+	  try {
+		  ret = new Scanner(f);
+	  }catch(FileNotFoundException e) {
+		  System.out.println("No File!!");
+		  System.exit(1);
+	  }
+	  
+	  return ret;
+  }
+
   @Override
     public int myHashCode() {
 	  int[][] pow3 = new int[][] {{1,3,9},{27,81,243},{729,2187,6561}};
@@ -45,23 +80,24 @@ public class TicTacToeHashCode extends Board {
   }
    
     public boolean isWin(String s) {
-    // return the value in the winner array for the hash chode of the board string sent in.
-    return true;
+    	super.setBoardString(s);
+    	return winners[myHashCode()];
+   
     }
   
    public static void main(String[] args) throws InterruptedException {
       TicTacToeHashCode board = new TicTacToeHashCode ("Tic Tac Toe");
-      while (true) {
+     while (true) {
       
        //TODO this line no longer works
        //  String currentBoard = board.boardValues[(int)(Math.random()* board.boardValues.length)];
          
-         board.displayRandomString();
-         board.setHashCode(board.myHashCode());
+        // board.displayRandomString();
+         board.setHashCodeLabel(board.myHashCode());
          // TODO Update this line to call your isWin method.
-         board.setWinner(TicTacToe.isWin(currentBoard));
+         board.setWinnerLabel(TicTacToe.isWin(board.getBoardString()));
          
-         Thread.sleep(4000);      
+         //Thread.sleep(4000);      
       }
    }
  }  
