@@ -1,11 +1,14 @@
 import java.lang.reflect.Field;
+import java.util.HashMap;
 
 public class TicTacToeHashMap  {
 
 // TODO Define a hash map to store the winning strings as Key and true as Value
+	private HashMap map;
 
    TicTacToeHashMap() {
    // TODO Instantiate/fill your HashMap ... pay attention to initial capacity and load values
+	   map = new HashMap(Math.pow(3,9), )
    
    }
 

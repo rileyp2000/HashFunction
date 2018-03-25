@@ -84,6 +84,10 @@ public class TicTacToeHashCode extends Board {
     	return winners[myHashCode()];
    
     }
+    
+    public boolean isWin() {
+    	return winners[myHashCode()];
+    }
   
    public static void main(String[] args) throws InterruptedException {
       TicTacToeHashCode board = new TicTacToeHashCode ("Tic Tac Toe");
@@ -92,12 +96,12 @@ public class TicTacToeHashCode extends Board {
        //TODO this line no longer works
        //  String currentBoard = board.boardValues[(int)(Math.random()* board.boardValues.length)];
          
-        // board.displayRandomString();
+         board.displayRandomString();
          board.setHashCodeLabel(board.myHashCode());
          // TODO Update this line to call your isWin method.
-         board.setWinnerLabel(TicTacToe.isWin(board.getBoardString()));
+         board.setWinnerLabel(board.isWin(board.getBoardString()));
          
-         //Thread.sleep(4000);      
+         Thread.sleep(1000);      
       }
    }
  }  
