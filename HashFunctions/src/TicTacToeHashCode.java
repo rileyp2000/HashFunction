@@ -11,9 +11,9 @@ public class TicTacToeHashCode extends Board {
 
 	TicTacToeHashCode(String s) {
 		super(s);
-		winners = new boolean[(int)Math.pow(3, 9)];
+		winners = new boolean[(int) Math.pow(3, 9)];
 		fillWinners();
-		}
+	}
 
 	public void fillWinners() {
 
@@ -29,7 +29,21 @@ public class TicTacToeHashCode extends Board {
 
 	}
 
-	public Scanner fileToScanner(String s) {
+	public static boolean isValid(String s) {
+
+		char[] a = s.toCharArray();
+
+		for (char c : a) {
+			if (c != 'x')
+				if(c != 'o')
+					if(c != ' ')
+						return false;
+		}
+
+		return true;
+	}
+
+	public static Scanner fileToScanner(String s) {
 		File f = new File(s);
 		Scanner ret = null;
 
@@ -73,8 +87,29 @@ public class TicTacToeHashCode extends Board {
 
 	@Override
 	public boolean isWin(String s) {
-		super.setBoardString(s);
-		return winners[myHashCode()];
+		int[][] pow3 = new int[][] { { 1, 3, 9 }, { 27, 81, 243 }, { 729, 2187, 6561 } };
+		int total = 0;
+		int curChar = 0;
+
+		for (int r = 0; r < 3; r++) {
+			for (int c = 0; c < 3; c++) {
+				char item = super.charAt(s, r, c);
+				switch (item) {
+				case 'x':
+					curChar = 1;
+					break;
+				case 'o':
+					curChar = 2;
+					break;
+				default:
+					curChar = 0;
+
+				}
+				total += curChar * pow3[r][c];
+			}
+		}
+
+		return winners[total];
 
 	}
 
@@ -84,11 +119,25 @@ public class TicTacToeHashCode extends Board {
 
 	public static void main(String[] args) throws InterruptedException {
 		TicTacToeHashCode board = new TicTacToeHashCode("Tic Tac Toe");
-		while (true) {
-			board.displayRandomString();
-			System.out.println("This should be a winner: " + board.isWin());
-			Thread.sleep(4000);
+		// while (true) {
+		// board.displayRandomString();
+		Scanner s = fileToScanner("TTT_Tests.txt");
+		while (s.hasNextLine()) {
+			String ln = s.nextLine();
+
+			if (isValid(ln)) {
+				board.setBoardString(ln);
+				System.out.println(ln);
+				System.out.println("This should be a winner: " + board.isWin());
+				Thread.sleep(1000);
+			}
 		}
+		s.close();
+		/*
+		 * System.out.println("This should be a winner: " + board.isWin());
+		 * Thread.sleep(4000);
+		 */
+		// }
 	}
 
 }
