@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+/**
+ * 
+ * @author rileyp
+ *
+ */
 public class TTT_HC extends Board {
 
 	// private ArrayList<Object> winners;
@@ -12,7 +17,7 @@ public class TTT_HC extends Board {
 	public TTT_HC(String title) {
 		super(title);
 		// winners = new ArrayList<Object>((int)Math.pow(3, 9));
-		winners = new Object[861];
+		winners = new Object[431];
 		fillWinners();
 	}
 
@@ -42,7 +47,7 @@ public class TTT_HC extends Board {
 
 	}
 
-	public static Scanner fileToScanner(String s) {
+	private static Scanner fileToScanner(String s) {
 		File f = new File(s);
 		Scanner ret = null;
 
@@ -77,20 +82,17 @@ public class TTT_HC extends Board {
 				total += curChar * (Math.pow((r + 1), 2) * (c + 1));
 			}
 		}
-		return total;
+		return total - 430;
 	}
 
 	@Override
 	boolean isWin(String s) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	boolean isWin() {
-		// TODO Auto-generated method stub
 		return false;
-
 	}
 	
 	public void printStats(){
@@ -117,7 +119,8 @@ public class TTT_HC extends Board {
 			}
 		}
 		avgBucket /= numBuckets;
-		System.out.println(total + " " + numBuckets + " " + numAlone + " " + maxSize + " " + finalVal + " " + avgBucket);
+		System.out.println("Total: " + total + "\nNumber Buckets: " + numBuckets + " \nNumber Single Entries: " + numAlone + " \nMax Bucket Size: " + maxSize 
+				+ " \nLast stored value index: " + finalVal + " \nAverage bucket size: " + avgBucket);
 	}
 	
 	public void printDistro(){
