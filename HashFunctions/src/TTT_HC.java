@@ -6,11 +6,13 @@ import java.util.Scanner;
 
 public class TTT_HC extends Board {
 
-	private /* HashMap<String, Object> */ ArrayList<Object> winners;
-
+	//private ArrayList<Object> winners;
+	private Object[] winners;
+	
 	public TTT_HC(String title) {
 		super(title);
-		winners = new ArrayList<Object>((int)Math.pow(3, 9));
+		//winners = new ArrayList<Object>((int)Math.pow(3, 9));
+		winners = new Object[(int)Math.pow(3, 9)];
 		fillWinners();
 	}
 
@@ -24,9 +26,11 @@ public class TTT_HC extends Board {
 			super.setBoardString(board);
 
 			try {
-				winners.get(myHashCode());
-			} catch (NullPointerException e) {
-				winners.set(myHashCode(), new BooleanData(board));
+				//winners.get(myHashCode());
+				winners[myHashCode()].toString();
+			} catch (NullPointerException | IndexOutOfBoundsException ex) {
+				//winners.add(myHashCode(), new BooleanData(board));
+				winners[myHashCode()] = new BooleanData(board);
 				break;
 			}
 
@@ -34,13 +38,17 @@ public class TTT_HC extends Board {
 			 * if(winners.get(myHashCode()) == null) winners.set(myHashCode(),
 			 * new BooleanData(board)); else{
 			 */
-			if (winners.get(myHashCode()) instanceof BooleanData) {
+			
+			
+			//if (winners.get(myHashCode()) instanceof BooleanData) {
+			if(winners[myHashCode()] instanceof BooleanData){
 				ArrayList<BooleanData> arr = new ArrayList<BooleanData>();
-				arr.add((BooleanData) winners.get(myHashCode()));
+				arr.add((BooleanData) winners[myHashCode()]);//winners.get(myHashCode()));
 				arr.add(new BooleanData(board));
-				winners.set(myHashCode(), arr);
+				//winners.set(myHashCode(), arr);
+				winners[myHashCode()] = arr;
 			} else
-				((ArrayList<BooleanData>) winners.get(myHashCode())).add(new BooleanData(board));
+				((ArrayList<BooleanData>) winners[myHashCode()]/*.get(myHashCode())*/).add(new BooleanData(board));
 		}
 
 	}
@@ -92,7 +100,8 @@ public class TTT_HC extends Board {
 	@Override
 	boolean isWin() {
 		// TODO Auto-generated method stub
-		try {
+		return false;
+		/*try {
 			winners.get(myHashCode());
 		} catch (NullPointerException e) {
 			return false;
@@ -106,7 +115,7 @@ public class TTT_HC extends Board {
 					return true;
 			}
 			return false;
-		}
+		}*/
 	}
 
 	public static void main(String[] args) {
