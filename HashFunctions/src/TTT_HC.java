@@ -6,10 +6,11 @@ import java.util.Scanner;
 
 public class TTT_HC extends Board {
 
-	private /*HashMap<String, Object>*/ ArrayList<Object> winners;
+	private /* HashMap<String, Object> */ ArrayList<Object> winners;
 
 	public TTT_HC(String title) {
 		super(title);
+		winners = new ArrayList<Object>((int)Math.pow(3, 9));
 		fillWinners();
 	}
 
@@ -21,30 +22,29 @@ public class TTT_HC extends Board {
 		while (file.hasNextLine()) {
 			String board = file.nextLine();
 			super.setBoardString(board);
-			
-			try{winners.get(myHashCode());}
-			catch(NullPointerException e){
+
+			try {
+				winners.get(myHashCode());
+			} catch (NullPointerException e) {
 				winners.set(myHashCode(), new BooleanData(board));
+				break;
 			}
-			
+
 			/*
 			 * if(winners.get(myHashCode()) == null) winners.set(myHashCode(),
 			 * new BooleanData(board)); else{
 			 */
-				if(winners.get(myHashCode()) instanceof BooleanData){
-					ArrayList<BooleanData> arr = new ArrayList<BooleanData>();
-					arr.add((BooleanData)winners.get(myHashCode()));
-					arr.add(new BooleanData(board));
-					winners.set(myHashCode(), arr);
-				}
-				else
-					((ArrayList<BooleanData>)winners.get(myHashCode())).add(new BooleanData(board));					
-			}
-				
-			
+			if (winners.get(myHashCode()) instanceof BooleanData) {
+				ArrayList<BooleanData> arr = new ArrayList<BooleanData>();
+				arr.add((BooleanData) winners.get(myHashCode()));
+				arr.add(new BooleanData(board));
+				winners.set(myHashCode(), arr);
+			} else
+				((ArrayList<BooleanData>) winners.get(myHashCode())).add(new BooleanData(board));
 		}
+
 	}
-	
+
 	public static Scanner fileToScanner(String s) {
 		File f = new File(s);
 		Scanner ret = null;
@@ -58,7 +58,7 @@ public class TTT_HC extends Board {
 
 		return ret;
 	}
-	
+
 	@Override
 	int myHashCode() {
 		int total = 0;
@@ -92,25 +92,24 @@ public class TTT_HC extends Board {
 	@Override
 	boolean isWin() {
 		// TODO Auto-generated method stub
-		try{ winners.get(myHashCode());}
-		catch(NullPointerException e){
+		try {
+			winners.get(myHashCode());
+		} catch (NullPointerException e) {
 			return false;
 		}
-		if(winners.get(myHashCode()) instanceof BooleanData){
-			return this.getBoardString().equals(((BooleanData)winners.get(myHashCode())).getBoard());
-		}
-		else{
-			ArrayList<BooleanData> a = ((ArrayList<BooleanData>)winners.get(myHashCode()));
-			for(BooleanData b : a){
-				if(b.getBoard().equals(getBoardString()))
+		if (winners.get(myHashCode()) instanceof BooleanData) {
+			return this.getBoardString().equals(((BooleanData) winners.get(myHashCode())).getBoard());
+		} else {
+			ArrayList<BooleanData> a = ((ArrayList<BooleanData>) winners.get(myHashCode()));
+			for (BooleanData b : a) {
+				if (b.getBoard().equals(getBoardString()))
 					return true;
 			}
 			return false;
 		}
 	}
-	
-	
-	public static void main(String[] args){
+
+	public static void main(String[] args) {
 		TTT_HC test = new TTT_HC("title");
 	}
 }
