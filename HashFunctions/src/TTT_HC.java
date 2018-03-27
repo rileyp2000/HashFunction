@@ -12,7 +12,7 @@ public class TTT_HC extends Board {
 	public TTT_HC(String title) {
 		super(title);
 		// winners = new ArrayList<Object>((int)Math.pow(3, 9));
-		winners = new Object[1000];
+		winners = new Object[861];
 		fillWinners();
 	}
 
@@ -24,7 +24,6 @@ public class TTT_HC extends Board {
 		while (file.hasNextLine()) {
 			String board = file.nextLine();
 			super.setBoardString(board);
-			System.out.println(board + "    " + myHashCode());
 			try {
 				winners[myHashCode()].toString();
 			} catch (NullPointerException | IndexOutOfBoundsException ex) {
@@ -66,16 +65,16 @@ public class TTT_HC extends Board {
 				char item = super.charAt(r, c);
 				switch (item) {
 				case 'x':
-					curChar = 2;
+					curChar = 11;
 					break;
 				case 'o':
-					curChar = 1;
+					curChar = 7;
 					break;
 				default:
-					curChar = 0;
+					curChar = 5;
 
 				}
-				total += curChar * ((r + 1) * (c + 1));
+				total += curChar * (Math.pow((r + 1), 2) * (c + 1));
 			}
 		}
 		return total;
@@ -93,19 +92,64 @@ public class TTT_HC extends Board {
 		return false;
 
 	}
-
-	public static void main(String[] args) {
-		TTT_HC test = new TTT_HC("title");
+	
+	public void printStats(){
 		int total = 0;
-		for (int i = 0; i < test.winners.length; i++) {
-			if (test.winners[i] != null) {
+		int numBuckets = 0;
+		int numAlone = 0;
+		int maxSize = 0;
+		int finalVal = 0;
+		double avgBucket = 0;
+		for (int i = 0; i < winners.length; i++) {
+			if (winners[i] != null) {
 				total++;
-				if (test.winners[i] instanceof ArrayList<?>)
-					System.out.println("ArrayList " + ((ArrayList<BooleanData>) test.winners[i]).size());
-				else
-					System.out.println("BooleanData");
+				finalVal = i;
+				if (winners[i] instanceof ArrayList<?>) {
+					//System.out.println("ArrayList " + ((ArrayList<BooleanData>) winners[i]).size());
+					numBuckets++;
+					avgBucket += ((ArrayList<BooleanData>) winners[i]).size();
+					if(((ArrayList<BooleanData>) winners[i]).size() > maxSize)
+						maxSize = ((ArrayList<BooleanData>) winners[i]).size();
+				} else {
+					//System.out.println("BooleanData");
+					numAlone++;
+				}
 			}
 		}
-		System.out.println(total);
+		avgBucket /= numBuckets;
+		System.out.println(total + " " + numBuckets + " " + numAlone + " " + maxSize + " " + finalVal + " " + avgBucket);
+	}
+	
+	public void printDistro(){
+		int fourths = (winners.length-1) / 4;
+		int tenths = (winners.length-1)/10;
+		
+		int total = 0;
+		for(int q = 0; q < 4; q++){
+			for(int i = q * fourths + 1; i < (q+1) * fourths; i++){
+				if (winners[i] != null)
+					total++;
+			}
+			System.out.println("Q" + (q+1) + ": " + total);
+			total = 0;
+		}
+		
+		total = 0;
+		
+		for(int q = 0; q < 10; q++){
+			for(int i = q * tenths + 1; i < (q+1) * tenths; i++){
+				if (winners[i] != null)
+					total++;
+			}
+			System.out.println("P" + (q+1) + ": " + total);
+			total = 0;
+		}
+	}
+	
+	public static void main(String[] args) {
+		TTT_HC test = new TTT_HC("title");
+		test.printStats();
+		test.printDistro();
+		
 	}
 }
