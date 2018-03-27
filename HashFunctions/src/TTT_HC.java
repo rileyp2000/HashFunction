@@ -21,9 +21,16 @@ public class TTT_HC extends Board {
 		while (file.hasNextLine()) {
 			String board = file.nextLine();
 			super.setBoardString(board);
-			if(winners.get(myHashCode()) == null)
+			
+			try{winners.get(myHashCode());}
+			catch(NullPointerException e){
 				winners.set(myHashCode(), new BooleanData(board));
-			else{
+			}
+			
+			/*
+			 * if(winners.get(myHashCode()) == null) winners.set(myHashCode(),
+			 * new BooleanData(board)); else{
+			 */
 				if(winners.get(myHashCode()) instanceof BooleanData){
 					ArrayList<BooleanData> arr = new ArrayList<BooleanData>();
 					arr.add((BooleanData)winners.get(myHashCode()));
@@ -31,9 +38,7 @@ public class TTT_HC extends Board {
 					winners.set(myHashCode(), arr);
 				}
 				else
-					((ArrayList<BooleanData>)winners.get(myHashCode())).add(new BooleanData(board));
-				
-					
+					((ArrayList<BooleanData>)winners.get(myHashCode())).add(new BooleanData(board));					
 			}
 				
 			
@@ -87,7 +92,25 @@ public class TTT_HC extends Board {
 	@Override
 	boolean isWin() {
 		// TODO Auto-generated method stub
-		return false;
+		try{ winners.get(myHashCode());}
+		catch(NullPointerException e){
+			return false;
+		}
+		if(winners.get(myHashCode()) instanceof BooleanData){
+			return this.getBoardString().equals(((BooleanData)winners.get(myHashCode())).getBoard());
+		}
+		else{
+			ArrayList<BooleanData> a = ((ArrayList<BooleanData>)winners.get(myHashCode()));
+			for(BooleanData b : a){
+				if(b.getBoard().equals(getBoardString()))
+					return true;
+			}
+			return false;
+		}
 	}
-
+	
+	
+	public static void main(String[] args){
+		TTT_HC test = new TTT_HC("title");
+	}
 }
