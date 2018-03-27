@@ -9,6 +9,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * JavaDocs written by Patrick Riley
+ * @author Terri Kelly
+ * 
+ *
+ */
 abstract class Board extends JFrame implements ActionListener {
 
 	private JButton buttons[][];
@@ -16,7 +22,11 @@ abstract class Board extends JFrame implements ActionListener {
 	private JLabel lblWinTitle;
 
 	private String boardString = "";
-
+	
+	/**
+	 * Creates a new board with the given title
+	 * @param title
+	 */
 	public Board(String title) {
 		super(title);
 		setupFrame();
