@@ -6,11 +6,13 @@ import java.util.Scanner;
 
 public class TTT_HC extends Board {
 
-	private /* HashMap<String, Object> */ ArrayList<Object> winners;
+	// private ArrayList<Object> winners;
+	Object[] winners;
 
 	public TTT_HC(String title) {
 		super(title);
-		winners = new ArrayList<Object>((int)Math.pow(3, 9));
+		// winners = new ArrayList<Object>((int)Math.pow(3, 9));
+		winners = new Object[861];
 		fillWinners();
 	}
 
@@ -22,25 +24,20 @@ public class TTT_HC extends Board {
 		while (file.hasNextLine()) {
 			String board = file.nextLine();
 			super.setBoardString(board);
-
 			try {
-				winners.get(myHashCode());
-			} catch (NullPointerException e) {
-				winners.set(myHashCode(), new BooleanData(board));
-				break;
+				winners[myHashCode()].toString();
+			} catch (NullPointerException | IndexOutOfBoundsException ex) {
+				winners[myHashCode()] = new BooleanData(board);
+				continue;
 			}
 
-			/*
-			 * if(winners.get(myHashCode()) == null) winners.set(myHashCode(),
-			 * new BooleanData(board)); else{
-			 */
-			if (winners.get(myHashCode()) instanceof BooleanData) {
+			if (winners[myHashCode()] instanceof BooleanData) {
 				ArrayList<BooleanData> arr = new ArrayList<BooleanData>();
-				arr.add((BooleanData) winners.get(myHashCode()));
+				arr.add((BooleanData) winners[myHashCode()]);
 				arr.add(new BooleanData(board));
-				winners.set(myHashCode(), arr);
+				winners[myHashCode()] = arr;
 			} else
-				((ArrayList<BooleanData>) winners.get(myHashCode())).add(new BooleanData(board));
+				((ArrayList<BooleanData>) winners[myHashCode()]).add(new BooleanData(board));
 		}
 
 	}
@@ -68,16 +65,16 @@ public class TTT_HC extends Board {
 				char item = super.charAt(r, c);
 				switch (item) {
 				case 'x':
-					curChar = 2;
+					curChar = 11;
 					break;
 				case 'o':
-					curChar = 1;
+					curChar = 7;
 					break;
 				default:
-					curChar = 0;
+					curChar = 5;
 
 				}
-				total += curChar * ((r + 1) * (c + 1));
+				total += curChar * (Math.pow((r + 1), 2) * (c + 1));
 			}
 		}
 		return total;
@@ -92,24 +89,67 @@ public class TTT_HC extends Board {
 	@Override
 	boolean isWin() {
 		// TODO Auto-generated method stub
-		try {
-			winners.get(myHashCode());
-		} catch (NullPointerException e) {
-			return false;
-		}
-		if (winners.get(myHashCode()) instanceof BooleanData) {
-			return this.getBoardString().equals(((BooleanData) winners.get(myHashCode())).getBoard());
-		} else {
-			ArrayList<BooleanData> a = ((ArrayList<BooleanData>) winners.get(myHashCode()));
-			for (BooleanData b : a) {
-				if (b.getBoard().equals(getBoardString()))
-					return true;
+		return false;
+
+	}
+	
+	public void printStats(){
+		int total = 0;
+		int numBuckets = 0;
+		int numAlone = 0;
+		int maxSize = 0;
+		int finalVal = 0;
+		double avgBucket = 0;
+		for (int i = 0; i < winners.length; i++) {
+			if (winners[i] != null) {
+				total++;
+				finalVal = i;
+				if (winners[i] instanceof ArrayList<?>) {
+					//System.out.println("ArrayList " + ((ArrayList<BooleanData>) winners[i]).size());
+					numBuckets++;
+					avgBucket += ((ArrayList<BooleanData>) winners[i]).size();
+					if(((ArrayList<BooleanData>) winners[i]).size() > maxSize)
+						maxSize = ((ArrayList<BooleanData>) winners[i]).size();
+				} else {
+					//System.out.println("BooleanData");
+					numAlone++;
+				}
 			}
-			return false;
+		}
+		avgBucket /= numBuckets;
+		System.out.println(total + " " + numBuckets + " " + numAlone + " " + maxSize + " " + finalVal + " " + avgBucket);
+	}
+	
+	public void printDistro(){
+		int fourths = (winners.length-1) / 4;
+		int tenths = (winners.length-1)/10;
+		
+		int total = 0;
+		for(int q = 0; q < 4; q++){
+			for(int i = q * fourths + 1; i < (q+1) * fourths; i++){
+				if (winners[i] != null)
+					total++;
+			}
+			System.out.println("Q" + (q+1) + ": " + total);
+			total = 0;
+		}
+		
+		total = 0;
+		
+		for(int q = 0; q < 10; q++){
+			for(int i = q * tenths + 1; i < (q+1) * tenths; i++){
+				if (winners[i] != null)
+					total++;
+			}
+			System.out.println("P" + (q+1) + ": " + total);
+			total = 0;
 		}
 	}
-
+	
 	public static void main(String[] args) {
 		TTT_HC test = new TTT_HC("title");
+		test.printStats();
+		test.printDistro();
+		
 	}
 }
