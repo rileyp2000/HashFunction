@@ -1,4 +1,4 @@
-	import java.awt.FlowLayout;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 
 /**
  * JavaDocs written by Patrick Riley
+ * 
  * @author Terri Kelly
  * 
  *
@@ -22,24 +23,44 @@ abstract class Board extends JFrame implements ActionListener {
 	private JLabel lblWinTitle;
 
 	private String boardString = "";
-	
+
 	/**
-	 * Creates a new board with the given title
+	 * Creates a new board with a given title
+	 * 
 	 * @param title
+	 *            the title for the JFrame
 	 */
 	public Board(String title) {
 		super(title);
 		setupFrame();
 	}
 
+	/**
+	 * Sets the hash code label on the frame
+	 * 
+	 * @param hashcode
+	 *            the hashcode to be displayed
+	 */
 	public void setHashCodeLabel(int hashcode) {
 		lblHashCode.setText("" + hashcode);
 	}
 
+	/**
+	 * Sets the winner label on the frame
+	 * 
+	 * @param result
+	 *            the result of the board
+	 */
 	public void setWinnerLabel(String result) {
 		lblWinTitle.setText(result);
 	}
 
+	/**
+	 * Sets the winner label on the frame, but with a boolean
+	 * 
+	 * @param result
+	 *            the result of the board
+	 */
 	public void setWinnerLabel(boolean result) {
 		if (result)
 			setWinnerLabel("Winner");
@@ -52,6 +73,11 @@ abstract class Board extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	}
 
+	/**
+	 * Sets up the first JPanel, adds buttons to it
+	 * 
+	 * @return new JPanel
+	 */
 	JPanel setupPanelOne() {
 		JPanel panel = new JPanel();
 		JLabel lblHCTitle = new JLabel("Hash Code");
@@ -66,6 +92,11 @@ abstract class Board extends JFrame implements ActionListener {
 		return panel;
 	}
 
+	/**
+	 * Sets up the second JPanel, the TTT grid
+	 * 
+	 * @return the new JPanel
+	 */
 	private JPanel setupPanelTwo() {
 		JButton b;
 		JPanel panel = new JPanel();
@@ -98,6 +129,13 @@ abstract class Board extends JFrame implements ActionListener {
 		return panel;
 	}
 
+	/**
+	 * Changes the value of the board square
+	 * 
+	 * @param ch
+	 *            the cell value to be cycled
+	 * @return the new char for the button
+	 */
 	private static char cycleValue(char ch) {
 		switch (ch) {
 		case 'x':
@@ -109,6 +147,9 @@ abstract class Board extends JFrame implements ActionListener {
 		}
 	}
 
+	/**
+	 * Sets up the JFrame for the TTT window, and adds panel 1 and 2 to the board
+	 */
 	private void setupFrame() {
 		JPanel panel2 = new JPanel();
 
@@ -126,6 +167,11 @@ abstract class Board extends JFrame implements ActionListener {
 		super.setVisible(true);
 	}
 
+	/**
+	 * generates a random x o or space
+	 * 
+	 * @return a random square value
+	 */
 	private char randomXO() {
 		int rnd = (int) (Math.random() * TicTacToe.CHAR_POSSIBILITIES);
 		switch (rnd) {
@@ -138,12 +184,38 @@ abstract class Board extends JFrame implements ActionListener {
 		}
 	}
 
+	/**
+	 * creates a hash code for the current board String
+	 * 
+	 * @return the hash code value of the board string
+	 */
 	abstract int myHashCode();
 
+	/**
+	 * Determines if the board is a winning board or not
+	 * 
+	 * @param s
+	 *            the string representation of the board
+	 * @return if the board is a winner or not
+	 */
 	abstract boolean isWin(String s);
 
+	/**
+	 * Determines if the board is a winning board or not
+	 * 
+	 * @return if the board is a winner or not
+	 */
 	abstract boolean isWin();
 
+	/**
+	 * gets the value of the button at the specified row and column
+	 * 
+	 * @param row
+	 *            the row of the button
+	 * @param col
+	 *            the column of the button
+	 * @return the value of the button at (r,c)
+	 */
 	public char charAt(int row, int col) {
 		String value = buttons[row][col].getText();
 		if (value.length() > 0)
@@ -151,15 +223,26 @@ abstract class Board extends JFrame implements ActionListener {
 		else
 			return '*';
 	}
-   
-   public char charAt(String s, int row, int col) {
-     int pos = row * TicTacToe.COLS + col;
-     if (s.length() >= pos)
-       return s.charAt(pos);
-     else
-       return '*';   
-   }
 
+	/**
+	 * Gets the value of a cell of a board from a string representation of it
+	 * @param s the board string
+	 * @param row the row of the desired cell
+	 * @param col the column of the desired cell
+	 * @return the char at (r,c)
+	 */
+	public char charAt(String s, int row, int col) {
+		int pos = row * TicTacToe.COLS + col;
+		if (s.length() >= pos)
+			return s.charAt(pos);
+		else
+			return '*';
+	}
+	
+	/**
+	 * Updates the buttons on the board to reflect a new value
+	 * @param s the string value of the new board
+	 */
 	public void show(String s) {
 		int pos = 0;
 		String letter;
@@ -183,24 +266,38 @@ abstract class Board extends JFrame implements ActionListener {
 				pos++;
 			}
 	}
-
+	
+	/**
+	 * resets the board to the current boardString
+	 */
 	public void resetBoardString() {
-   boardString = "";
+		boardString = "";
 		for (int r = 0; r < TicTacToe.ROWS; r++)
 			for (int c = 0; c < TicTacToe.COLS; c++) {
 				boardString += buttons[r][c].getText();
 			}
 	}
-
+	
+	/**
+	 * Sets the board based on a string
+	 * @param s the new board represented as a string
+	 */
 	public void setBoardString(String s) {
 		boardString = s;
 		show(s);
 	}
-
+	
+	/**
+	 * Gets the board string
+	 * @return the boardString
+	 */
 	public String getBoardString() {
 		return boardString;
 	}
-
+	
+	/**
+	 * Displays a random String on the board and updates the win and hash code areas of the panel
+	 */
 	public void displayRandomString() {
 		for (int r = 0; r < TicTacToe.ROWS; r++)
 			for (int c = 0; c < TicTacToe.COLS; c++) {
