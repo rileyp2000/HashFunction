@@ -1,8 +1,12 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class TTT_HC extends Board {
 
-	private HashMap<String, Object> winners;
+	private /*HashMap<String, Object>*/ ArrayList<Object> winners;
 
 	public TTT_HC(String title) {
 		super(title);
@@ -10,9 +14,46 @@ public class TTT_HC extends Board {
 	}
 
 	private void fillWinners() {
+		String fn = "TicTacToeWinners.txt";
 
+		Scanner file = fileToScanner(fn);
+
+		while (file.hasNextLine()) {
+			String board = file.nextLine();
+			super.setBoardString(board);
+			if(winners.get(myHashCode()) == null)
+				winners.set(myHashCode(), new BooleanData(board));
+			else{
+				if(winners.get(myHashCode()) instanceof BooleanData){
+					ArrayList<BooleanData> arr = new ArrayList<BooleanData>();
+					arr.add((BooleanData)winners.get(myHashCode()));
+					arr.add(new BooleanData(board));
+					winners.set(myHashCode(), arr);
+				}
+				else
+					((ArrayList<BooleanData>)winners.get(myHashCode())).add(new BooleanData(board));
+				
+					
+			}
+				
+			
+		}
 	}
+	
+	public static Scanner fileToScanner(String s) {
+		File f = new File(s);
+		Scanner ret = null;
 
+		try {
+			ret = new Scanner(f);
+		} catch (FileNotFoundException e) {
+			System.out.println("No File!!");
+			System.exit(1);
+		}
+
+		return ret;
+	}
+	
 	@Override
 	int myHashCode() {
 		int total = 0;
