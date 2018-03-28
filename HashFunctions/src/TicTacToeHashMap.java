@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Set;
@@ -57,11 +58,38 @@ public class TicTacToeHashMap {
 		return table == null ? 0 : table.length;
 	}
 
-	private int entries() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		Field tableField = HashMap.class.getDeclaredField("entrySet");
+	private void entries() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		Field tableField = HashMap.class.getDeclaredField("table");
 		tableField.setAccessible(true);
-		Object entry = tableField.get(map);
-		return 0;
+		Object[] table = (Object[] ) tableField.get(map);
+		
+		ArrayList<Integer> bucketValues = new ArrayList<Integer>();
+		
+		int counter = 0;
+		int nav = 0;
+		for(Object t : table) {
+			if( t != null) {
+				System.out.println(++counter);
+				Field next = t.getClass().getDeclaredField("next");
+				next.setAccessible(true);
+				Object o = (Object) next.get(t);
+				int ct = 0;
+				while(o != null) {
+					ct++;
+					next = o.getClass().getDeclaredField("next");
+					next.setAccessible(true);
+					o = (Object) next.get(t);
+					System.out.println("next");
+				}
+				bucketValues.add(ct);
+			}
+			else
+				nav++;
+		}
+		
+		System.out.println("Number of used indicies: " + counter);
+		System.out.println("Number of empty spaces: " + nav);
+		System.out.println("Number of buckets: " + bucketValues.size() + "\nBuckets: " +  bucketValues);
 	}
 
 	// TODO using the same code to get the table of entries as in the capacity
@@ -78,8 +106,10 @@ public class TicTacToeHashMap {
 			throws java.io.FileNotFoundException, NoSuchFieldException, IllegalAccessException {
 
 		TicTacToeHashMap m = new TicTacToeHashMap();
-		Field[] f = HashMap.class.getDeclaredFields();
-		System.out.println(m.entries() + " " + m.capacity());
+		Field[] f = BooleanData.class.getDeclaredFields();
+		
+		m.entries();
+		System.out.println(m.capacity());
 
 		// TODO read in and store the strings in your hashmap, then close the
 		// file
