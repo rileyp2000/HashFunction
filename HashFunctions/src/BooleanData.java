@@ -1,17 +1,30 @@
-
+/**
+ * THis class is used to replace a String in TTTHM, and is used for hashing in TTT_HC
+ * @author Patrick
+ *
+ */
 public class BooleanData {
 	private boolean isWinner;
 	private String board;
 	
+	/**
+	 * Creates a new Boolean Data with a string representation
+	 * @param s winning board string
+	 */
 	public BooleanData(String s){
 		isWinner = true;
 		board = s;
 	}
 	
+	/**
+	 * 
+	 * @return the board string for this winning object
+	 */
 	public String getBoard(){
 		return board;
 	}
 	
+	@Override
 	public boolean equals(Object o){
 		if(o != null)
 			return board.equals(((BooleanData)o).getBoard());
@@ -19,6 +32,7 @@ public class BooleanData {
 			return false;
 	}
 	
+	@Override
 	public int hashCode(){
 		int total = 0;
 		int curChar = 0;
@@ -57,6 +71,7 @@ public class BooleanData {
 			return '*';
 	}
 	
+	@Override
 	public String toString(){
 		return "The value of the winning board is " + board;
 	}

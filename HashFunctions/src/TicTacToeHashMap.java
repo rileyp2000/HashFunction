@@ -95,8 +95,9 @@ public class TicTacToeHashMap {
 	 * @throws SecurityException
 	 * @throws IllegalArgumentException
 	 * @throws IllegalAccessException
+	 * @throws InterruptedException 
 	 */
-	private void entries(boolean isStringMap) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+	private void entries(boolean isStringMap) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, InterruptedException {
 		Field tableField = HashMap.class.getDeclaredField("table");
 		tableField.setAccessible(true);
 		
@@ -121,8 +122,9 @@ public class TicTacToeHashMap {
 					ct++;
 					next = o.getClass().getDeclaredField("next");
 					next.setAccessible(true);
-					o = (Object) next.get(t);
-					System.out.println("next");
+					o = next.get(o);
+					//Thread.sleep(4000);
+					System.out.println(o);
 				}
 				bucketValues.add(ct);
 			}
@@ -146,14 +148,19 @@ public class TicTacToeHashMap {
 
 	@SuppressWarnings("unused")
 	public static void main(String[] args)
-			throws java.io.FileNotFoundException, NoSuchFieldException, IllegalAccessException {
+			throws java.io.FileNotFoundException, NoSuchFieldException, IllegalAccessException, SecurityException, IllegalArgumentException, InterruptedException {
 
 		TicTacToeHashMap m = new TicTacToeHashMap();
 		Field[] f = BooleanData.class.getDeclaredFields();
 		
+		System.out.println("For the first map");
 		m.entries(true);
 		System.out.println(m.capacity(true));
-
+		
+		System.out.println("For the second map");
+		System.out.println(m.capacity(false));
+		m.entries(false);
+		
 		// TODO read in and store the strings in your hashmap, then close the
 		// file
 
