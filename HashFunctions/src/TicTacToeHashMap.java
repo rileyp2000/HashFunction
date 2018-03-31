@@ -7,22 +7,22 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class TicTacToeHashMap {
-	//CLASS BOOLEAN DATA SERVES THE SAME PURPOSE AS TICTACTOEMYHASHMAP WOULD
+	// CLASS BOOLEAN DATA SERVES THE SAME PURPOSE AS TICTACTOEMYHASHMAP WOULD
 	private HashMap<String, Boolean> map;
 	private HashMap<BooleanData, Boolean> map2;
-	
+
 	/**
 	 * Instantiates and fills the 2 different HashMaps
 	 */
 	TicTacToeHashMap() {
-	
+
 		map = new HashMap<String, Boolean>(1000, (float) .75);
-		map2 = new HashMap<BooleanData, Boolean>(1000, (float) .75);
+		map2 = new HashMap<BooleanData, Boolean>(500, (float) .75);
 		fillWinners();
 		fillNewWinners();
 
 	}
-	
+
 	/**
 	 * Fills in the first hashmap that uses a string with the winning boards
 	 */
@@ -36,7 +36,7 @@ public class TicTacToeHashMap {
 			map.put(board, true);
 		}
 	}
-	
+
 	/**
 	 * fills in the second hashmap that uses BooleanData with the winning boards
 	 */
@@ -51,10 +51,11 @@ public class TicTacToeHashMap {
 		}
 	}
 
-	
 	/**
 	 * Converts the filename to a scanner
-	 * @param s the filename
+	 * 
+	 * @param s
+	 *            the filename
 	 * @return A new scanner based on the filename passed in
 	 */
 	private static Scanner fileToScanner(String s) {
@@ -80,94 +81,118 @@ public class TicTacToeHashMap {
 	private int capacity(boolean isStringMap) throws NoSuchFieldException, IllegalAccessException {
 		Field tableField = HashMap.class.getDeclaredField("table");
 		tableField.setAccessible(true);
-		
+
 		Object[] table = null;
-		if(isStringMap)
+		if (isStringMap)
 			table = (Object[]) tableField.get(map);
 		else
 			table = (Object[]) tableField.get(map2);
 		return table == null ? 0 : table.length;
 	}
-	
+
 	/**
-	 * Tries to get a list of entries from the map, and print them to the console
+	 * Tries to get a list of entries from the map, and print them to the
+	 * console
+	 * 
 	 * @throws NoSuchFieldException
 	 * @throws SecurityException
 	 * @throws IllegalArgumentException
 	 * @throws IllegalAccessException
-	 * @throws InterruptedException 
+	 * @throws InterruptedException
 	 */
-	private void entries(boolean isStringMap) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, InterruptedException {
+	private void entries(boolean isStringMap) throws NoSuchFieldException, SecurityException, IllegalArgumentException,
+			IllegalAccessException, InterruptedException {
 		Field tableField = HashMap.class.getDeclaredField("table");
 		tableField.setAccessible(true);
-		
+
 		Object[] table = null;
-		if(isStringMap)
+		if (isStringMap)
 			table = (Object[]) tableField.get(map);
 		else
 			table = (Object[]) tableField.get(map2);
-		
+
 		ArrayList<Integer> bucketValues = new ArrayList<Integer>();
-		
+
 		int counter = 0;
 		int nav = 0;
-		for(Object t : table) {
-			if( t != null) {
-				System.out.println(++counter + "\n" + t);
+		for (Object t : table) {
+			// System.out.println("Current Index " + (counter + nav));
+			if (t != null) {
+				/* System.out.println( */++counter/* ) */;
+				// System.out.println(t);
 				Field next = t.getClass().getDeclaredField("next");
 				next.setAccessible(true);
 				Object o = (Object) next.get(t);
 				int ct = 0;
-				while(o != null) {
+				while (o != null) {
 					ct++;
 					next = o.getClass().getDeclaredField("next");
 					next.setAccessible(true);
 					o = next.get(o);
-					//Thread.sleep(4000);
-					System.out.println(o);
+					// System.out.println(o);
 				}
-				bucketValues.add(ct);
-				System.out.println(bucketValues);
-			}
-			else
-				System.out.println(++nav);
+				if (ct != 0)
+					bucketValues.add(ct);
+			} else
+				/* System.out.println( */++nav/* ) */;
 		}
-		
+
 		System.out.println("Number of used indicies: " + counter);
 		System.out.println("Number of empty spaces: " + nav);
-		System.out.println("Number of buckets: " + bucketValues.size() + "\nBuckets: " +  bucketValues);
+		System.out.println("Number of buckets: " + bucketValues.size() + "\nBuckets: " + bucketValues);
+		double bucketAvg = 0;
+		int highest = bucketValues.get(0);
+		for (Integer i : bucketValues) {
+			bucketAvg += i;
+			if (i > highest)
+				highest = i;
+		}
+		bucketAvg /= bucketValues.size();
+		System.out.println("Average Bucket Size: " + bucketAvg);
+		System.out.println("Largest Bucket: " + highest);
+		printDistro(table);
 	}
 
-	// TODO using the same code to get the table of entries as in the capacity
-	// method,
-	// create a method that will evaluate the table as directed in the
-	// assignment.
-	// note - if an entry is not null, then it has a value, it may have more
-	// than one value
-	// see if you can determine how many values it has. Using the debugger will
-	// assist.
+	public void printDistro(Object[] winners) {
+		int fourths = (winners.length - 1) / 4;
+		int tenths = (winners.length - 1) / 10;
+
+		int total = 0;
+		for (int q = 0; q < 4; q++) {
+			for (int i = q * fourths + 1; i < (q + 1) * fourths; i++) {
+				if (winners[i] != null)
+					total++;
+			}
+			System.out.println("Q" + (q + 1) + ": " + total);
+			total = 0;
+		}
+		
+		total = 0;
+
+		for (int q = 0; q < 10; q++) {
+			for (int i = q * tenths + 1; i < (q + 1) * tenths; i++) {
+				if (winners[i] != null)
+					total++;
+			}
+			System.out.println("P" + (q + 1) + ": " + total);
+			total = 0;
+		}
+	}
 
 	@SuppressWarnings("unused")
-	public static void main(String[] args)
-			throws java.io.FileNotFoundException, NoSuchFieldException, IllegalAccessException, SecurityException, IllegalArgumentException, InterruptedException {
+	public static void main(String[] args) throws java.io.FileNotFoundException, NoSuchFieldException,
+			IllegalAccessException, SecurityException, IllegalArgumentException, InterruptedException {
 
 		TicTacToeHashMap m = new TicTacToeHashMap();
 		Field[] f = BooleanData.class.getDeclaredFields();
-		
+
 		System.out.println("For the first map");
 		m.entries(true);
 		System.out.println(m.capacity(true));
-		
+
 		System.out.println("For the second map");
 		System.out.println(m.capacity(false));
 		m.entries(false);
-		
-		// TODO read in and store the strings in your hashmap, then close the
-		// file
-
-		// TODO print out the capacity using the capcity() method
-		// TODO print out the other analytical statistics as required in the
-		// assignment
 
 	}
 
