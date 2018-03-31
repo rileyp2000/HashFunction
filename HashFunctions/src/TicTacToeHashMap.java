@@ -7,19 +7,25 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class TicTacToeHashMap {
-
-	// TODO Define a hash map to store the winning strings as Key and true as
-	// Value
+	//CLASS BOOLEAN DATA SERVES THE SAME PURPOSE AS TICTACTOEMYHASHMAP WOULD
 	private HashMap<String, Boolean> map;
-
+	private HashMap<BooleanData, Boolean> map2;
+	
+	/**
+	 * Instantiates and fills the 2 different HashMaps
+	 */
 	TicTacToeHashMap() {
-		// TODO Instantiate/fill your HashMap ... pay attention to initial
-		// capacity and load values
+	
 		map = new HashMap<String, Boolean>(1000, (float) .75);
+		map2 = new HashMap<BooleanData, Boolean>(1000, (float) .75);
 		fillWinners();
+		fillNewWinners();
 
 	}
-
+	
+	/**
+	 * Fills in the first hashmap that uses a string with the winning boards
+	 */
 	private void fillWinners() {
 		String fn = "TicTacToeWinners.txt";
 
@@ -30,7 +36,27 @@ public class TicTacToeHashMap {
 			map.put(board, true);
 		}
 	}
+	
+	/**
+	 * fills in the second hashmap that uses BooleanData with the winning boards
+	 */
+	private void fillNewWinners() {
+		String fn = "TicTacToeWinners.txt";
 
+		Scanner file = fileToScanner(fn);
+
+		while (file.hasNextLine()) {
+			String board = file.nextLine();
+			map2.put(new BooleanData(board), true);
+		}
+	}
+
+	
+	/**
+	 * Converts the filename to a scanner
+	 * @param s the filename
+	 * @return A new scanner based on the filename passed in
+	 */
 	private static Scanner fileToScanner(String s) {
 		File f = new File(s);
 		Scanner ret = null;
@@ -51,17 +77,34 @@ public class TicTacToeHashMap {
 	// Information about capacity (different than size()) and what is stored in
 	// the cells
 
-	private int capacity() throws NoSuchFieldException, IllegalAccessException {
+	private int capacity(boolean isStringMap) throws NoSuchFieldException, IllegalAccessException {
 		Field tableField = HashMap.class.getDeclaredField("table");
 		tableField.setAccessible(true);
-		Object[] table = (Object[]) tableField.get(map);
+		
+		Object[] table = null;
+		if(isStringMap)
+			table = (Object[]) tableField.get(map);
+		else
+			table = (Object[]) tableField.get(map2);
 		return table == null ? 0 : table.length;
 	}
-
-	private void entries() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+	
+	/**
+	 * Tries to get a list of entries from the map, and print them to the console
+	 * @throws NoSuchFieldException
+	 * @throws SecurityException
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
+	 */
+	private void entries(boolean isStringMap) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		Field tableField = HashMap.class.getDeclaredField("table");
 		tableField.setAccessible(true);
-		Object[] table = (Object[] ) tableField.get(map);
+		
+		Object[] table = null;
+		if(isStringMap)
+			table = (Object[]) tableField.get(map);
+		else
+			table = (Object[]) tableField.get(map2);
 		
 		ArrayList<Integer> bucketValues = new ArrayList<Integer>();
 		
@@ -108,8 +151,8 @@ public class TicTacToeHashMap {
 		TicTacToeHashMap m = new TicTacToeHashMap();
 		Field[] f = BooleanData.class.getDeclaredFields();
 		
-		m.entries();
-		System.out.println(m.capacity());
+		m.entries(true);
+		System.out.println(m.capacity(true));
 
 		// TODO read in and store the strings in your hashmap, then close the
 		// file
