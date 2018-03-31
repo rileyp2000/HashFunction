@@ -113,7 +113,7 @@ public class TicTacToeHashMap {
 		int nav = 0;
 		for(Object t : table) {
 			if( t != null) {
-				System.out.println(++counter);
+				System.out.println(++counter + "\n" + t);
 				Field next = t.getClass().getDeclaredField("next");
 				next.setAccessible(true);
 				Object o = (Object) next.get(t);
@@ -127,9 +127,10 @@ public class TicTacToeHashMap {
 					System.out.println(o);
 				}
 				bucketValues.add(ct);
+				System.out.println(bucketValues);
 			}
 			else
-				nav++;
+				System.out.println(++nav);
 		}
 		
 		System.out.println("Number of used indicies: " + counter);
