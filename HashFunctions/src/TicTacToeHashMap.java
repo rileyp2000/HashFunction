@@ -190,9 +190,10 @@ public class TicTacToeHashMap {
 		m.entries(true);
 		System.out.println(m.capacity(true));
 
-		System.out.println("For the second map");
+		//Not Currently working
+		/*System.out.println("For the second map");
 		System.out.println(m.capacity(false));
-		m.entries(false);
+		m.entries(false);*/
 
 	}
 
