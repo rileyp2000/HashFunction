@@ -131,7 +131,7 @@ public class TicTacToeHashMap {
 					o = next.get(o);
 					// System.out.println(o);
 				}
-				if (ct != 0)
+				if (ct > 1)
 					bucketValues.add(ct);
 			} else
 				/* System.out.println( */++nav/* ) */;

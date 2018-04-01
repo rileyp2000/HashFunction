@@ -1,7 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Scanner;
 
 /**
@@ -9,18 +8,20 @@ import java.util.Scanner;
  * @author rileyp
  *
  */
+@SuppressWarnings("serial")
 public class TTT_HC extends Board {
 
 	// private ArrayList<Object> winners;
 	Object[] winners;
+	private final int ARRAYSIZE = 431;
 
 	public TTT_HC(String title) {
 		super(title);
-		// winners = new ArrayList<Object>((int)Math.pow(3, 9));
-		winners = new Object[431];
+		winners = new Object[ARRAYSIZE];
 		fillWinners();
 	}
 
+	@SuppressWarnings("unchecked")
 	private void fillWinners() {
 		String fn = "TicTacToeWinners.txt";
 
@@ -94,8 +95,9 @@ public class TTT_HC extends Board {
 	boolean isWin() {
 		return false;
 	}
-	
-	public void printStats(){
+
+	@SuppressWarnings("unchecked")
+	public void printStats() {
 		int total = 0;
 		int numBuckets = 0;
 		int numAlone = 0;
@@ -107,52 +109,54 @@ public class TTT_HC extends Board {
 				total++;
 				finalVal = i;
 				if (winners[i] instanceof ArrayList<?>) {
-					//System.out.println("ArrayList " + ((ArrayList<BooleanData>) winners[i]).size());
+					// System.out.println("ArrayList " +
+					// ((ArrayList<BooleanData>) winners[i]).size());
 					numBuckets++;
 					avgBucket += ((ArrayList<BooleanData>) winners[i]).size();
-					if(((ArrayList<BooleanData>) winners[i]).size() > maxSize)
+					if (((ArrayList<BooleanData>) winners[i]).size() > maxSize)
 						maxSize = ((ArrayList<BooleanData>) winners[i]).size();
 				} else {
-					//System.out.println("BooleanData");
+					// System.out.println("BooleanData");
 					numAlone++;
 				}
 			}
 		}
 		avgBucket /= numBuckets;
-		System.out.println("Total: " + total + "\nNumber Buckets: " + numBuckets + " \nNumber Single Entries: " + numAlone + " \nMax Bucket Size: " + maxSize 
-				+ " \nLast stored value index: " + finalVal + " \nAverage bucket size: " + avgBucket);
+		System.out.println("Total: " + total + "\nNumber Buckets: " + numBuckets + " \nNumber Single Entries: "
+				+ numAlone + " \nMax Bucket Size: " + maxSize + " \nLast stored value index: " + finalVal
+				+ " \nAverage bucket size: " + avgBucket);
 	}
-	
-	public void printDistro(){
-		int fourths = (winners.length-1) / 4;
-		int tenths = (winners.length-1)/10;
-		
+
+	public void printDistro() {
+		int fourths = (winners.length - 1) / 4;
+		int tenths = (winners.length - 1) / 10;
+
 		int total = 0;
-		for(int q = 0; q < 4; q++){
-			for(int i = q * fourths + 1; i < (q+1) * fourths; i++){
+		for (int q = 0; q < 4; q++) {
+			for (int i = q * fourths + 1; i < (q + 1) * fourths; i++) {
 				if (winners[i] != null)
 					total++;
 			}
-			System.out.println("Q" + (q+1) + ": " + total);
+			System.out.println("Q" + (q + 1) + ": " + total);
 			total = 0;
 		}
-		
+
 		total = 0;
-		
-		for(int q = 0; q < 10; q++){
-			for(int i = q * tenths + 1; i < (q+1) * tenths; i++){
+
+		for (int q = 0; q < 10; q++) {
+			for (int i = q * tenths + 1; i < (q + 1) * tenths; i++) {
 				if (winners[i] != null)
 					total++;
 			}
-			System.out.println("P" + (q+1) + ": " + total);
+			System.out.println("P" + (q + 1) + ": " + total);
 			total = 0;
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		TTT_HC test = new TTT_HC("title");
 		test.printStats();
 		test.printDistro();
-		
+
 	}
 }

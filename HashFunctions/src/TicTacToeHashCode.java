@@ -129,7 +129,7 @@ public class TicTacToeHashCode extends Board {
 				board.setBoardString(ln);
 				System.out.println(ln);
 				System.out.println("This should be a winner: " + board.isWin());
-				Thread.sleep(1000);
+				Thread.sleep(4000);
 			}
 		}
 		s.close();
