@@ -2,7 +2,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-//TODO Make sure you remove all of the TODO comments from this file before turning itin
+/**
+ * 
+ * @author rileyp
+ *
+ */
 
 public class TicTacToeHashCode extends Board {
 
