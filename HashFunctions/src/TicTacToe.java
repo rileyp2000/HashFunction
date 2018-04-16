@@ -6,6 +6,13 @@ public class TicTacToe {
   public final static int POSSIBILITIES = (int) Math.pow(3,9);
   public final static int CHAR_POSSIBILITIES = 3; // x, o or space
   
+  /**
+   * Calculates the number of the specified characters in the board
+   * @param b the board
+   * @param ch The character to search for
+   * @return int the number of the characters
+   *
+   */
   private static int numChars(char[][] b, char ch) {
   int total = 0;
     for (int r = 0; r < ROWS; r++)
